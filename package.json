@@ -1,0 +1,20 @@
+{
+  "name": "geolite2-city-json",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Free, serverless IP geolocation as static JSON files, generated daily from MaxMind GeoLite2-City",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "fetch": "node scripts/fetch.js",
+    "build": "node scripts/split.js",
+    "verify": "node scripts/verify.js",
+    "generate": "npm run fetch && npm run build"
+  },
+  "dependencies": {
+    "maxmind": "4.3.29"
+  }
+}

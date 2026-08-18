@@ -1,0 +1,88 @@
+name: Update data
+
+on:
+  schedule:
+    # Daily at 03:27 UTC (off-peak; non-round minute so GitHub is less likely
+    # to delay the run). GeoLite2-City itself refreshes ~twice a week, so most
+    # days produce no changes and the commit step is skipped.
+    - cron: "27 3 * * *"
+  workflow_dispatch: {}
+
+# Allow the built-in GITHUB_TOKEN to push the regenerated data.
+permissions:
+  contents: write
+
+# Never let two runs race to push.
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      MMDB_URL: https://cdn.jsdelivr.net/npm/geolite2-city/GeoLite2-City.mmdb.gz
+      MMDB_PATH: GeoLite2-City.mmdb
+      NODE_OPTIONS: --max-old-space-size=4096
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download GeoLite2-City database
+        run: |
+          curl -fSL --retry 5 --retry-delay 2 --retry-all-errors \
+            -o GeoLite2-City.mmdb.gz "$MMDB_URL"
+          gunzip -f GeoLite2-City.mmdb.gz
+          ls -l GeoLite2-City.mmdb
+
+      - name: Generate JSON tree
+        run: npm run build
+
+      - name: Verify output against the database
+        env:
+          SAMPLES: "500000"
+        run: npm run verify
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A data
+          if git diff --cached --quiet; then
+            echo "No data changes — nothing to commit."
+            exit 0
+          fi
+
+          BUILD="$(jq -r '.build_epoch' data/meta.json)"
+          git commit -m "Update GeoLite2-City data (build ${BUILD})"
+
+          # Push with a few retries for transient network errors.
+          n=0
+          until [ "$n" -ge 4 ]; do
+            if git push; then
+              echo "Pushed."
+              break
+            fi
+            n=$((n+1))
+            echo "Push failed (attempt $n) — refreshing and retrying…"
+            git pull --rebase origin "$(git rev-parse --abbrev-ref HEAD)" || true
+            sleep $((2 ** n))
+          done
+          if [ "$n" -ge 4 ]; then
+            echo "Push failed after retries." >&2
+            exit 1
+          fi

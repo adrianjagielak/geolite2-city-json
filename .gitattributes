@@ -1,0 +1,7 @@
+# Normalise line endings so generated files are byte-identical everywhere.
+* text=auto eol=lf
+
+# The data/ tree is machine-generated. Marking it keeps it out of GitHub's
+# language stats and collapses it by default in diffs / pull requests, which
+# keeps the ~56k-file directory from swamping code review.
+data/** linguist-generated=true
