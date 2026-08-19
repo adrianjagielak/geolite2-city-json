@@ -45,7 +45,7 @@ Each file `data/A/B.json` describes the `/16` block `A.B.0.0/16`:
 
 ```json
 {
-  "r": [ {"country":"PL","region":"22","city":"Gdansk","lat":54.3947,"lon":18.5926}, ... ],
+  "r": [ {"c":"PL","r":"22","t":"Gdansk","y":54.3947,"x":18.5926}, ... ],
   "c": [ slot0, slot1, ..., slot255 ]
 }
 ```
@@ -60,15 +60,20 @@ Each file `data/A/B.json` describes the `/16` block `A.B.0.0/16`:
     `[startOctet_k, startOctet_{k+1})`. `ri = -1` means "no data" for that
     range, otherwise the record is `r[ri]`.
 
-A record is minimal and omits absent fields:
+A record uses single-letter keys (it is stored millions of times) and omits
+absent fields:
 
-| field | meaning |
-| --- | --- |
-| `country` | ISO 3166-1 alpha-2 country code (falls back to the registered country) |
-| `region`  | ISO 3166-2 code of the top-level subdivision (state / province) *(optional)* |
-| `city`    | English city name *(optional)* |
-| `lat`     | latitude *(optional)* |
-| `lon`     | longitude *(optional)* |
+| key | field | meaning |
+| --- | --- | --- |
+| `c` | country | ISO 3166-1 alpha-2 code (falls back to the registered country) |
+| `r` | region  | ISO 3166-2 top-level subdivision (state / province) *(optional)* |
+| `t` | city    | English city name *(optional)* |
+| `y` | lat     | latitude *(optional)* |
+| `x` | lon     | longitude *(optional)* |
+
+`y`/`x` follow the map-axis convention (latitude = y-axis, longitude = x-axis).
+Note the two levels: the **top-level** `r` is the records array, while a `r`
+*inside a record* is its region.
 
 `data/meta.json` carries the source build date and counts.
 
@@ -81,6 +86,21 @@ whose `startOctet ≤ D` and use its record index.
 ---
 
 ## Usage
+
+The lookup is deliberately trivial: fetch `data/A/B.json`, read `c[C]`, and (for
+split /24s) pick the run covering `D`. Clients in a few languages below.
+
+### Dart / Flutter
+
+A ready-made package lives in [`packages/geolite2_city_json/`](packages/geolite2_city_json)
+(in-memory LRU cache, per-IP request coalescing, `http` as its only dependency):
+
+```dart
+import 'package:geolite2_city_json/geolite2_city_json.dart';
+
+final loc = await geolocate('8.8.8.8');
+print('${loc?.city}, ${loc?.region}, ${loc?.country}'); // -> null, null, US
+```
 
 ### JavaScript (browser or Node 18+)
 
@@ -107,7 +127,7 @@ async function geolocate(ip) {
 }
 
 console.log(await geolocate('8.8.8.8'));
-// { country: 'US', lat: 37.751, lon: -97.822 }
+// { c: 'US', y: 37.751, x: -97.822 }   (c=country, r=region, t=city, y=lat, x=lon)
 ```
 
 ### Python 3
@@ -135,6 +155,7 @@ def geolocate(ip):
     return None if ri < 0 else data["r"][ri]
 
 print(geolocate("8.8.8.8"))
+# {'c': 'US', 'y': 37.751, 'x': -97.822}   (c=country, r=region, t=city, y=lat, x=lon)
 ```
 
 ### Shell (curl + jq)
@@ -172,7 +193,7 @@ replace `@master` with a commit SHA or tag.
 ## Coverage & accuracy
 
 - **IPv4 only.** IPv6 is not generated.
-- City-level location is **approximate** — `lat`/`lon` are area centroids, not
+- City-level location is **approximate** — `y`/`x` (lat/lon) are area centroids, not
   precise positions, and GeoLite2 (the free tier) is less accurate than MaxMind's
   paid GeoIP2. Treat results as best-effort.
 - Addresses with no city data still resolve to a country where MaxMind has one;
