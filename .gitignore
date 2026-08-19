@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Downloaded database (regenerated each run, never committed)
+GeoLite2-City.mmdb
+GeoLite2-City.mmdb.gz
+*.mmdb
+*.mmdb.gz
+
+# Local scratch / test output
+.tmp/
+*.log
