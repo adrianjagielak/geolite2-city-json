@@ -45,7 +45,7 @@ Each file `data/A/B.json` describes the `/16` block `A.B.0.0/16`:
 
 ```json
 {
-  "r": [ {"c":"PL","r":"22","t":"Gdansk","y":54.3947,"x":18.5926}, ... ],
+  "r": [ {"c":"PL","r":"22","t":"Gdansk","y":54.3947,"x":18.5926,"a":5}, ... ],
   "c": [ slot0, slot1, ..., slot255 ]
 }
 ```
@@ -70,6 +70,7 @@ absent fields:
 | `t` | city    | English city name *(optional)* |
 | `y` | lat     | latitude *(optional)* |
 | `x` | lon     | longitude *(optional)* |
+| `a` | accuracy | radius of `y`/`x` in km *(optional)* |
 
 `y`/`x` follow the map-axis convention (latitude = y-axis, longitude = x-axis).
 Note the two levels: the **top-level** `r` is the records array, while a `r`
@@ -127,7 +128,7 @@ async function geolocate(ip) {
 }
 
 console.log(await geolocate('8.8.8.8'));
-// { c: 'US', y: 37.751, x: -97.822 }   (c=country, r=region, t=city, y=lat, x=lon)
+// { c: 'US', y: 37.751, x: -97.822, a: 1000 }   (c=country, r=region, t=city, y=lat, x=lon, a=accuracy km)
 ```
 
 ### Python 3
@@ -155,7 +156,7 @@ def geolocate(ip):
     return None if ri < 0 else data["r"][ri]
 
 print(geolocate("8.8.8.8"))
-# {'c': 'US', 'y': 37.751, 'x': -97.822}   (c=country, r=region, t=city, y=lat, x=lon)
+# {'c': 'US', 'y': 37.751, 'x': -97.822, 'a': 1000}   (c=country, r=region, t=city, y=lat, x=lon, a=accuracy km)
 ```
 
 ### Shell (curl + jq)

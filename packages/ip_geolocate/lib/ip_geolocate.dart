@@ -33,17 +33,22 @@ class GeoLocation {
   /// Longitude in decimal degrees.
   final double? lon;
 
+  /// Radius in kilometres within which the address is likely located
+  /// (MaxMind's `accuracy_radius` for [lat]/[lon]).
+  final int? accuracyKm;
+
   const GeoLocation({
     this.country,
     this.region,
     this.city,
     this.lat,
     this.lon,
+    this.accuracyKm,
   });
 
   @override
   String toString() => 'GeoLocation(country: $country, region: $region, '
-      'city: $city, lat: $lat, lon: $lon)';
+      'city: $city, lat: $lat, lon: $lon, accuracyKm: $accuracyKm)';
 
   @override
   bool operator ==(Object other) =>
@@ -52,10 +57,11 @@ class GeoLocation {
       other.region == region &&
       other.city == city &&
       other.lat == lat &&
-      other.lon == lon;
+      other.lon == lon &&
+      other.accuracyKm == accuracyKm;
 
   @override
-  int get hashCode => Object.hash(country, region, city, lat, lon);
+  int get hashCode => Object.hash(country, region, city, lat, lon, accuracyKm);
 }
 
 // Cache of the last few resolved addresses (insertion order encodes recency).
@@ -143,6 +149,7 @@ GeoLocation? decodeSixteen(Map<String, dynamic> file, int c, int d) {
     city: rec['t'] as String?,
     lat: (rec['y'] as num?)?.toDouble(),
     lon: (rec['x'] as num?)?.toDouble(),
+    accuracyKm: (rec['a'] as num?)?.toInt(),
   );
 }
 

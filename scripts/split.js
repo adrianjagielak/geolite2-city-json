@@ -27,7 +27,7 @@
  *                                   octet range has no data, otherwise r[ri].
  *
  * A <record> is minimal, uses single-letter keys, and omits absent fields:
- *   { c: country, r: region, t: city, y: latitude, x: longitude }
+ *   { c: country, r: region, t: city, y: latitude, x: longitude, a: accuracy km }
  *
  * The output is fully deterministic for a given input .mmdb (stable ordering,
  * no timestamps) so that unchanged /16s produce byte-identical files and git
@@ -71,6 +71,7 @@ const FORMAT_VERSION = 1;
 // Keys are single letters to save space (records are stored millions of times):
 //   c = country (ISO 3166-1 alpha-2)   r = region (ISO 3166-2 subdivision)
 //   t = city (English name)            y = latitude   x = longitude
+//   a = accuracy radius of y/x, in km
 // (lat = y and lon = x follow the usual map-axis convention: y is north-south,
 // x is east-west.) Keys are inserted in a fixed order so JSON.stringify output
 // is deterministic.
@@ -93,6 +94,7 @@ function minimalRecord(d) {
   if (d.location) {
     if (typeof d.location.latitude === 'number') out.y = d.location.latitude;
     if (typeof d.location.longitude === 'number') out.x = d.location.longitude;
+    if (typeof d.location.accuracy_radius === 'number') out.a = d.location.accuracy_radius;
   }
   return Object.keys(out).length ? out : null;
 }
@@ -376,7 +378,7 @@ async function main() {
       file: 'data/<A>/<B>.json is the /16 A.B.0.0/16',
       r: 'array of distinct records used in this /16',
       c: 'array indexed by 3rd octet C; slot = null | int (=> r[int]) | [[startOctet, ri], ...] runs (ri=-1 means no data)',
-      record: { c: 'ISO 3166-1 country', r: 'ISO 3166-2 subdivision (region)', t: 'English city name', y: 'latitude', x: 'longitude' },
+      record: { c: 'ISO 3166-1 country', r: 'ISO 3166-2 subdivision (region)', t: 'English city name', y: 'latitude', x: 'longitude', a: 'accuracy radius (km)' },
     },
   };
   await fsp.writeFile(path.join(OUT_DIR, 'meta.json'), JSON.stringify(meta, null, 2) + '\n');
