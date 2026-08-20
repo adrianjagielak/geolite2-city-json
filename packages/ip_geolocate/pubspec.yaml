@@ -2,7 +2,7 @@ name: ip_geolocate
 description: >-
   IPv4 geolocation from the free geolite2-city-json static dataset (MaxMind
   GeoLite2-City): country, region, city and coordinates for an IP address.
-version: 1.0.0
+version: 1.1.0
 repository: https://github.com/adrianjagielak/geolite2-city-json
 issue_tracker: https://github.com/adrianjagielak/geolite2-city-json/issues
 topics:

@@ -35,6 +35,7 @@ Any field of `GeoLocation` may be `null`:
 | `city`    | `String?` | English city name |
 | `lat`     | `double?` | latitude |
 | `lon`     | `double?` | longitude |
+| `accuracyKm` | `int?` | radius (km) around lat/lon the IP is likely within |
 
 Non-IPv4 input throws a `FormatException`.
 

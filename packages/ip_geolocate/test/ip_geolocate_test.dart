@@ -22,7 +22,7 @@ void main() {
     final file = <String, dynamic>{
       'r': [
         {'c': 'US', 'y': 37.75, 'x': -97.82},
-        {'c': 'JP', 'r': '13', 't': 'Tokyo', 'y': 35.68, 'x': 139.69},
+        {'c': 'JP', 'r': '13', 't': 'Tokyo', 'y': 35.68, 'x': 139.69, 'a': 20},
         {'c': 'JP', 'y': 35.69, 'x': 139.69},
       ],
       'c': [
@@ -80,6 +80,7 @@ void main() {
           city: 'Tokyo',
           lat: 35.68,
           lon: 139.69,
+          accuracyKm: 20,
         ),
       );
     });

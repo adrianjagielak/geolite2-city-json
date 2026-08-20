@@ -31,6 +31,7 @@ function minimalRecord(d) {
   if (d.location) {
     if (typeof d.location.latitude === 'number') out.y = d.location.latitude;
     if (typeof d.location.longitude === 'number') out.x = d.location.longitude;
+    if (typeof d.location.accuracy_radius === 'number') out.a = d.location.accuracy_radius;
   }
   return Object.keys(out).length ? out : null;
 }

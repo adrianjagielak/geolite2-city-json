@@ -1,3 +1,8 @@
+## 1.1.0
+
+- Add `accuracyKm` to `GeoLocation` — the radius in km around lat/lon the address
+  is likely within (MaxMind's `accuracy_radius`).
+
 ## 1.0.0
 
 - Initial release.
