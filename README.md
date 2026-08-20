@@ -92,11 +92,11 @@ split /24s) pick the run covering `D`. Clients in a few languages below.
 
 ### Dart / Flutter
 
-A ready-made package lives in [`packages/geolite2_city_json/`](packages/geolite2_city_json)
-(in-memory LRU cache, per-IP request coalescing, `http` as its only dependency):
+A ready-made package lives in [`packages/ip_geolocate/`](packages/ip_geolocate)
+(in-memory cache, per-IP request coalescing, `http` as its only dependency):
 
 ```dart
-import 'package:geolite2_city_json/geolite2_city_json.dart';
+import 'package:ip_geolocate/ip_geolocate.dart';
 
 final loc = await geolocate('8.8.8.8');
 print('${loc?.city}, ${loc?.region}, ${loc?.country}'); // -> null, null, US

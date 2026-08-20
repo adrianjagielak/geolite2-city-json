@@ -1,8 +1,8 @@
-name: geolite2_city_json
+name: ip_geolocate
 description: >-
-  Tiny IPv4 geolocation client for the free geolite2-city-json static dataset
-  (MaxMind GeoLite2-City), with in-memory LRU caching and request coalescing.
-version: 0.1.0
+  IPv4 geolocation from the free geolite2-city-json static dataset (MaxMind
+  GeoLite2-City): country, region, city and coordinates for an IP address.
+version: 1.0.0
 repository: https://github.com/adrianjagielak/geolite2-city-json
 issue_tracker: https://github.com/adrianjagielak/geolite2-city-json/issues
 topics:
