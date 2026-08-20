@@ -3,7 +3,7 @@
   "source": "GeoLite2-City",
   "build_epoch": "2026-08-14T04:52:53.000Z",
   "networks": 3753111,
-  "distinct_records": 98873,
+  "distinct_records": 233927,
   "files": 56391,
   "schema": {
     "file": "data/<A>/<B>.json is the /16 A.B.0.0/16",
@@ -14,7 +14,8 @@
       "r": "ISO 3166-2 subdivision (region)",
       "t": "English city name",
       "y": "latitude",
-      "x": "longitude"
+      "x": "longitude",
+      "a": "accuracy radius (km)"
     }
   }
 }
