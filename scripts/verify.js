@@ -22,15 +22,15 @@ function minimalRecord(d) {
   const country =
     (d.country && d.country.iso_code) ||
     (d.registered_country && d.registered_country.iso_code);
-  if (country) out.country = country;
+  if (country) out.c = country;
   if (d.subdivisions && d.subdivisions.length) {
     const region = d.subdivisions[0].iso_code;
-    if (region) out.region = region;
+    if (region) out.r = region;
   }
-  if (d.city && d.city.names && d.city.names.en) out.city = d.city.names.en;
+  if (d.city && d.city.names && d.city.names.en) out.t = d.city.names.en;
   if (d.location) {
-    if (typeof d.location.latitude === 'number') out.lat = d.location.latitude;
-    if (typeof d.location.longitude === 'number') out.lon = d.location.longitude;
+    if (typeof d.location.latitude === 'number') out.y = d.location.latitude;
+    if (typeof d.location.longitude === 'number') out.x = d.location.longitude;
   }
   return Object.keys(out).length ? out : null;
 }

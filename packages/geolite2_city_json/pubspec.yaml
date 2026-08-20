@@ -1,0 +1,22 @@
+name: geolite2_city_json
+description: >-
+  Tiny IPv4 geolocation client for the free geolite2-city-json static dataset
+  (MaxMind GeoLite2-City), with in-memory LRU caching and request coalescing.
+version: 0.1.0
+repository: https://github.com/adrianjagielak/geolite2-city-json
+issue_tracker: https://github.com/adrianjagielak/geolite2-city-json/issues
+topics:
+  - geolocation
+  - geoip
+  - ip
+  - maxmind
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  http: ^1.2.0
+
+dev_dependencies:
+  lints: ^4.0.0
+  test: ^1.24.0
