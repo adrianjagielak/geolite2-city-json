@@ -1,0 +1,36 @@
+name: Dart package
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "packages/ip_geolocate/**"
+      - ".github/workflows/dart.yml"
+  pull_request:
+    paths:
+      - "packages/ip_geolocate/**"
+      - ".github/workflows/dart.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dart-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: packages/ip_geolocate
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - run: dart pub get
+      - run: dart format --output=none --set-exit-if-changed .
+      - run: dart analyze --fatal-infos
+      - run: dart test
