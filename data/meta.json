@@ -10,11 +10,11 @@
     "r": "array of distinct records used in this /16",
     "c": "array indexed by 3rd octet C; slot = null | int (=> r[int]) | [[startOctet, ri], ...] runs (ri=-1 means no data)",
     "record": {
-      "country": "ISO country",
-      "region": "ISO-3166-2 subdivision",
-      "city": "English city name",
-      "lat": "latitude",
-      "lon": "longitude"
+      "c": "ISO 3166-1 country",
+      "r": "ISO 3166-2 subdivision (region)",
+      "t": "English city name",
+      "y": "latitude",
+      "x": "longitude"
     }
   }
 }
