@@ -1,10 +1,10 @@
 {
   "format": 1,
   "source": "GeoLite2-City",
-  "build_epoch": "2026-08-14T04:52:53.000Z",
-  "networks": 3753111,
-  "distinct_records": 233927,
-  "files": 56391,
+  "build_epoch": "2026-08-18T14:30:47.000Z",
+  "networks": 3704456,
+  "distinct_records": 226770,
+  "files": 56393,
   "schema": {
     "file": "data/<A>/<B>.json is the /16 A.B.0.0/16",
     "r": "array of distinct records used in this /16",
