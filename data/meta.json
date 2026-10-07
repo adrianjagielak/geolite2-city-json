@@ -1,9 +1,9 @@
 {
   "format": 1,
   "source": "GeoLite2-City",
-  "build_epoch": "2026-09-29T15:02:04.000Z",
-  "networks": 3635178,
-  "distinct_records": 216215,
+  "build_epoch": "2026-10-02T14:49:52.000Z",
+  "networks": 3649180,
+  "distinct_records": 217018,
   "files": 56392,
   "schema": {
     "file": "data/<A>/<B>.json is the /16 A.B.0.0/16",
